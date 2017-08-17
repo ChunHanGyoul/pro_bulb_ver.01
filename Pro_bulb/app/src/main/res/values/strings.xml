@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Pro_bulb</string>
+   <!-- Application -->
+    <!-- Math Alarm Activity -->
+    <string name="title_activity_set_alarms">알람 설정</string>
+    <string name="no_alarms">아직 설정된 알람이 없습니다.</string>
+
+    <string name="button_new">새로 만들기</string>
+
+    <!-- Menu -->
+    <string name="menu_item_new">새로 만들기</string>
+    <string name="menu_item_save">저장</string>
+    <string name="menu_item_delete">취소</string>
+
+    <color name="title_background_color">#000000</color>
+
+    <string name="button_delete">삭제</string>
+    <string name="ok">확인</string>
+    <string name="cancel">취소</string>
+
+    <!-- MainActivity String -->
+    <string name="option">Option</string>
+    <string name="alarm">Alarm</string>
+    <string name="mic">Mic</string>
+    <string name="brightness">Brightness</string>
+    <string name="white">White</string>
+    <string name="connection">Connect</string>
+
+    <!-- Connection String -->
+    <string name="port_no">Port</string>
+    <string name="ip_addr">Yun IP</string>
+    <string name="data_sent">Sent</string>
+    <string name="data_received">Received</string>
+    <string name="button_start">Connect</string>
+    <string name="button_stop">Disconnect</string>
+    <string name="button_onoff">On/Off</string>
+   <string name="securyty_Mode">Security Mode</string>
+   <string name="temperature_Mode">Temperature Mode</string>
+
+
+</resources>

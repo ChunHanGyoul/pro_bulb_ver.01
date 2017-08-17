@@ -1,0 +1,168 @@
+package com.example.kwonwanbin.pro_bulb;
+
+import android.os.AsyncTask;
+import android.util.Log;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+
+public class ArduinoConnection extends AsyncTask<Void, byte[], Boolean> {
+    static Socket yunsocket;
+    static DataInputStream yunin;
+    static DataOutputStream yunout;
+    static String serverIpAddress;
+    int yunData = 666;
+    int count = 0;
+    static byte[] buffer = new byte[4];
+    public ArduinoConnection(String ip) {
+        serverIpAddress = ip;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        Log.d("ZZZZZ", "pre");
+    }
+
+    class runThread extends Thread {
+
+        public void run() {
+            try {
+                while (yunData != -1) {
+
+                    yunin.read(buffer);
+                    // publishProgress(buffer);
+                    // after read the data in the buffer, if the buffer's value or nothing is present update this activity
+
+                    if (count == 0) {
+                        Log.d("ZZZZZ", "doInBackground loop");
+                        Log.d("Port number : ", String.valueOf(yunsocket.getPort()));
+                        Log.d("ZZZZZ", "doInBackground after read");
+                    }
+                    count = 2;
+                }
+                yunsocket.close();
+                yunin.close();;
+                yunout.close();
+                yunin.read(buffer);
+
+            }
+            catch(Exception e) {
+                Log.d("",e.toString());
+            }
+        }
+    }
+
+    @Override
+    protected Boolean doInBackground(Void... params) {
+        boolean result = false;
+        try {
+            Log.d("ZZZZZ", "doInBackground");
+
+
+            InetAddress serverAddr = InetAddress.getByName(serverIpAddress);
+            yunsocket = new Socket(serverAddr, 6666);
+
+            if (yunsocket.isConnected()) {
+                yunin = new DataInputStream(yunsocket.getInputStream());
+                yunout = new DataOutputStream(yunsocket.getOutputStream());
+
+                Log.d("ZZZZZ", "doInBackground socket connections up" + yunin.toString() + " what is youout : " + yunout.toString());
+                runThread r = new runThread();
+                r.run();
+                /*
+                while (yunData != -1) {
+
+                    yunin.read(buffer);
+                    if(isCancelled()) {
+
+                        break;
+                    }
+                   // publishProgress(buffer);
+                    // after read the data in the buffer, if the buffer's value or nothing is present update this activity
+
+                    if (count == 0) {
+                        Log.d("ZZZZZ", "doInBackground loop");
+                        Log.d("Port number : ", String.valueOf(yunsocket.getPort()));
+                        Log.d("ZZZZZ", "doInBackground after read");
+                    }
+                    count = 2;
+                }
+                */
+                Log.d("ZZZZZZ", "Out of loop");
+            } else {
+
+
+                Log.d("NotConnected", "ip can't match");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("ZZZZZ", "doInBackground IOException");
+
+            result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("ZZZZZ", "doInBackground Exception");
+            result = true;
+        } finally {
+            Log.d("ZZZZZ", "doInBackground close sockets");
+            try {
+                yunin.close();
+                yunout.close();
+                yunsocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                result = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = true;
+            }
+        }
+        return result;
+
+    }
+
+
+    @Override
+    public void onCancelled() {
+        super.onCancelled();
+    }
+
+    public static byte current_Bulb_Status()
+    {
+        return (byte)buffer[0];
+    }
+
+    public static void SendDirectionToYun(short direction) {
+        try {
+            if (yunsocket.isConnected()) {
+                //InfoText1.setText("Yun Connected");
+
+                //Log.d("ZZZZZ", "SendDirectionToYun: Writing received message to socket");
+                yunout.writeByte((byte)255);
+                yunout.writeByte(direction);
+            } else {
+                Log.d("ZZZZZ", "SendDirectionToYun: Cannot send message. Socket is closed");
+            }
+        } catch (Exception e) {
+
+            Log.d("ZZZZZ", "SendDirectionToYun: Message send failed. Caught an exception");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onProgressUpdate(byte[]... direct) {
+
+    }
+
+    public static boolean isSocketConnected() {
+        if (yunsocket == null || !yunsocket.isConnected())
+            return false;
+        return true;
+    }
+
+
+}

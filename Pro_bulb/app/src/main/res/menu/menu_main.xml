@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+<item
+    android:id="@+id/menu_sort"
+    android:title="&#x25BE;"
+    android:titleCondensed="&#x25BE;">
+
+    <item android:id="@+id/Security" android:title="@string/securyty_Mode"
+        app:showAsAction="never"
+        android:checkable="true"
+        />
+    <item android:id="@+id/Temperature" android:title="@string/temperature_Mode"
+        app:showAsAction="never"
+        />
+</item>
+
+</menu>
